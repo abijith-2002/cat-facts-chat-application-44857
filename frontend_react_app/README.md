@@ -1,82 +1,62 @@
-# Lightweight React Template for KAVIA
+# Nord-Themed Cat Facts Chat App
 
-This project provides a minimal React template with a clean, modern UI and minimal dependencies.
+A modern, minimalistic single-page chat app built with React. Every message you send is automatically answered with a random cat fact (sourced from [catfact.ninja](https://catfact.ninja/fact)). Styled with the Nord color palette, fully responsive, and uses the Inter Google Font for a clean, contemporary look.
 
 ## Features
 
-- **Lightweight**: No heavy UI frameworks - uses only vanilla CSS and React
-- **Modern UI**: Clean, responsive design with KAVIA brand styling
-- **Fast**: Minimal dependencies for quick loading times
-- **Simple**: Easy to understand and modify
+- **Live chat interface**: Send as many messages as you like.
+- **Auto-response**: Bot instantly replies with a fresh cat fact.
+- **Beautiful Nord Theme**: Consistent color palette for dark, sleek UI.
+- **Responsive & minimal**: Works intuitively on desktop & mobile.
+- **Auto-scroll**: Always see the latest message.
+- **Environment-aware**: Fetches API endpoint from `.env` if provided.
+- **Inter Google Font**: For modern, easy-to-read text.
 
 ## Getting Started
 
-In the project directory, you can run:
+1. **Install** dependencies:
 
-### `npm start`
+   ```
+   npm install
+   ```
 
-Runs the app in development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+2. **(Optional)** Set custom cat fact API endpoint in `.env`:
 
-### `npm test`
+   ```
+   cp .env.example .env
+   ```
+   Then edit `.env` if needed.
 
-Launches the test runner in interactive watch mode.
+3. **Run** the development server:
 
-### `npm run build`
+   ```
+   npm start
+   ```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+   Open [http://localhost:3000](http://localhost:3000).
 
-## Customization
+## Configuration
 
-### Colors
+The app by default uses [https://catfact.ninja/fact](https://catfact.ninja/fact), but you can specify a different endpoint.
 
-The main brand colors are defined as CSS variables in `src/App.css`:
+Just create a `.env` file in the project root with:
 
-```css
-:root {
-  --kavia-orange: #E87A41;
-  --kavia-dark: #1A1A1A;
-  --text-color: #ffffff;
-  --text-secondary: rgba(255, 255, 255, 0.7);
-  --border-color: rgba(255, 255, 255, 0.1);
-}
+```
+REACT_APP_CATFACT_API=https://catfact.ninja/fact
 ```
 
-### Components
+## Design Choices
 
-This template uses pure HTML/CSS components instead of a UI framework. You can find component styles in `src/App.css`. 
+- **Nord Palette**: See [`src/App.css`](src/App.css) for the theme variables.
+- **Font**: Google [Inter](https://fonts.google.com/specimen/Inter).
+- **No heavy dependencies**: Only React and basic packages.
 
-Common components include:
-- Buttons (`.btn`, `.btn-large`)
-- Container (`.container`)
-- Navigation (`.navbar`)
-- Typography (`.title`, `.subtitle`, `.description`)
+## Folder Structure
 
-## Learn More
+- `src/App.js` - Full chat UI and logic
+- `src/App.css` - Nord theme, layout, responsive styles
+- `.env.example` - Example for API config
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## License
 
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Provided for demonstration and educational purposes.

@@ -1,47 +1,160 @@
-import React, { useState, useEffect } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useRef, useEffect } from "react";
+import "./App.css";
 
 // PUBLIC_INTERFACE
+/**
+ * App Component: A single-page chat interface using the Nord color palette.
+ * Features:
+ * - Message input and history display
+ * - Auto-response with random cat facts
+ * - Responsive and minimalistic
+ * - Auto-scroll to latest message
+ * - Uses Inter font and environment variable for API URL
+ */
 function App() {
-  const [theme, setTheme] = useState('light');
+  const [messages, setMessages] = useState([
+    {
+      sender: "bot",
+      text: "Hi! I will send you a fun cat fact every time you send a message 😺",
+      timestamp: new Date().toISOString(),
+    },
+  ]);
+  const [input, setInput] = useState("");
+  const chatEndRef = useRef(null);
+  const [loading, setLoading] = useState(false);
 
-  // Effect to apply theme to document element
+  // Scroll to latest message
   useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme);
-  }, [theme]);
+    if (chatEndRef.current) {
+      chatEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
+
+  // Insert Inter font into head
+  useEffect(() => {
+    const link = document.createElement("link");
+    link.href =
+      "https://fonts.googleapis.com/css?family=Inter:400,500,700&display=swap";
+    link.rel = "stylesheet";
+    document.head.appendChild(link);
+    return () => {
+      document.head.removeChild(link);
+    };
+  }, []);
+
+  // Fetch the catfact API URL from the environment (.env) or use default
+  const CATFACT_API =
+    (typeof process !== "undefined" &&
+      process.env &&
+      process.env.REACT_APP_CATFACT_API) ||
+    "https://catfact.ninja/fact";
 
   // PUBLIC_INTERFACE
-  const toggleTheme = () => {
-    setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light');
+  /** Sends user's message and automatically gets a cat fact response. */
+  const handleSend = async (e) => {
+    e.preventDefault();
+    const trimmed = input.trim();
+    if (!trimmed) return;
+
+    const userMessage = {
+      sender: "user",
+      text: trimmed,
+      timestamp: new Date().toISOString(),
+    };
+    setMessages((prev) => [...prev, userMessage]);
+    setInput("");
+    setLoading(true);
+
+    try {
+      // Fetch a cat fact
+      const resp = await fetch(CATFACT_API);
+      if (!resp.ok) throw new Error("Failed to fetch cat fact");
+      const data = await resp.json();
+      const fact = data.fact || "Here's a cat fact!";
+      setMessages((prev) => [
+        ...prev,
+        {
+          sender: "bot",
+          text: fact,
+          timestamp: new Date().toISOString(),
+        },
+      ]);
+    } catch (error) {
+      setMessages((prev) => [
+        ...prev,
+        {
+          sender: "bot",
+          text: "Sorry, I couldn't fetch a cat fact right now.",
+          timestamp: new Date().toISOString(),
+        },
+      ]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Handle 'Enter' key (without shift) for sending message.
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      handleSend(e);
+    }
   };
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <button 
-          className="theme-toggle" 
-          onClick={toggleTheme}
-          aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
-        >
-          {theme === 'light' ? '🌙 Dark' : '☀️ Light'}
-        </button>
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <p>
-          Current theme: <strong>{theme}</strong>
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+    <div className="chat-root">
+      <header className="chat-header">
+        <span role="img" aria-label="cat" className="logo">
+          🐾
+        </span>
+        Cat Facts Chat
       </header>
+      <main className="chat-window" tabIndex={0} aria-label="chat history">
+        {messages.map((msg, idx) => (
+          <div
+            key={idx}
+            className={
+              msg.sender === "user"
+                ? "msg-bubble user-bubble"
+                : "msg-bubble bot-bubble"
+            }
+            aria-label={msg.sender === "user" ? "User message" : "Bot message"}
+          >
+            <span className="msg-text">{msg.text}</span>
+            <span className="msg-time">
+              {new Date(msg.timestamp).toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
+            </span>
+          </div>
+        ))}
+        <div ref={chatEndRef} />
+      </main>
+      <form className="chat-input-row" autoComplete="off" onSubmit={handleSend}>
+        <textarea
+          className="chat-input"
+          name="chat"
+          required
+          placeholder="Type your message…"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyDown={handleKeyDown}
+          rows={1}
+          disabled={loading}
+        />
+        <button
+          className="chat-send"
+          type="submit"
+          disabled={!input.trim() || loading}
+          aria-label="Send message"
+        >
+          {loading ? (
+            <span className="loader" />
+          ) : (
+            <span aria-hidden="true">➤</span>
+          )}
+        </button>
+      </form>
     </div>
   );
 }
