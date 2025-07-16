@@ -108,28 +108,31 @@ function App() {
         </span>
         Cat Facts Chat
       </header>
-      <main className="chat-window" tabIndex={0} aria-label="chat history">
-        {messages.map((msg, idx) => (
-          <div
-            key={idx}
-            className={
-              msg.sender === "user"
-                ? "msg-bubble user-bubble"
-                : "msg-bubble bot-bubble"
-            }
-            aria-label={msg.sender === "user" ? "User message" : "Bot message"}
-          >
-            <span className="msg-text">{msg.text}</span>
-            <span className="msg-time">
-              {new Date(msg.timestamp).toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit",
-              })}
-            </span>
-          </div>
-        ))}
-        <div ref={chatEndRef} />
-      </main>
+      {/* Chat layout now splits: chat-window is above, chat-input-row is always fixed at bottom */}
+      <div className="chat-content">
+        <main className="chat-window" tabIndex={0} aria-label="chat history">
+          {messages.map((msg, idx) => (
+            <div
+              key={idx}
+              className={
+                msg.sender === "user"
+                  ? "msg-bubble user-bubble"
+                  : "msg-bubble bot-bubble"
+              }
+              aria-label={msg.sender === "user" ? "User message" : "Bot message"}
+            >
+              <span className="msg-text">{msg.text}</span>
+              <span className="msg-time">
+                {new Date(msg.timestamp).toLocaleTimeString([], {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
+              </span>
+            </div>
+          ))}
+          <div ref={chatEndRef} />
+        </main>
+      </div>
       <form className="chat-input-row" autoComplete="off" onSubmit={handleSend}>
         <textarea
           className="chat-input"
