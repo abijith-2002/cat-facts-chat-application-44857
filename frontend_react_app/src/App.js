@@ -101,16 +101,36 @@ function App() {
   };
 
   return (
-    <div className="chat-root">
-      <header className="chat-header">
+    <div
+      className="chat-root"
+      style={{
+        maxWidth: "100vw",
+        minWidth: 0,
+        width: "100vw",
+        overflowX: "hidden",
+        boxSizing: "border-box",
+      }}
+    >
+      <header className="chat-header" style={{ maxWidth: "100vw", boxSizing: "border-box", overflowX: "auto" }}>
         <span role="img" aria-label="cat" className="logo">
           🐾
         </span>
         Cat Facts Chat
       </header>
       {/* Chat layout now splits: chat-window is above, chat-input-row is always fixed at bottom */}
-      <div className="chat-content">
-        <main className="chat-window" tabIndex={0} aria-label="chat history">
+      <div className="chat-content" style={{ maxWidth: "100vw", width: "100%", minWidth: 0 }}>
+        <main
+          className="chat-window"
+          tabIndex={0}
+          aria-label="chat history"
+          style={{
+            maxWidth: "100vw",
+            minWidth: 0,
+            width: "100%",
+            overflowX: "hidden",
+            boxSizing: "border-box",
+          }}
+        >
           {messages.map((msg, idx) => (
             <div
               key={idx}
@@ -120,6 +140,14 @@ function App() {
                   : "msg-bubble bot-bubble"
               }
               aria-label={msg.sender === "user" ? "User message" : "Bot message"}
+              style={{
+                maxWidth: "96vw",
+                minWidth: 0,
+                overflowWrap: "anywhere",
+                wordBreak: "break-word",
+                whiteSpace: "pre-wrap",
+                boxSizing: "border-box",
+              }}
             >
               <span className="msg-text">{msg.text}</span>
               <span className="msg-time">
@@ -133,7 +161,17 @@ function App() {
           <div ref={chatEndRef} />
         </main>
       </div>
-      <form className="chat-input-row" autoComplete="off" onSubmit={handleSend}>
+      <form
+        className="chat-input-row"
+        style={{
+          maxWidth: "100vw",
+          minWidth: 0,
+          width: "100vw",
+          boxSizing: "border-box",
+        }}
+        autoComplete="off"
+        onSubmit={handleSend}
+      >
         <textarea
           className="chat-input"
           name="chat"
@@ -144,6 +182,13 @@ function App() {
           onKeyDown={handleKeyDown}
           rows={1}
           disabled={loading}
+          style={{
+            maxWidth: "100%",
+            minWidth: 0,
+            boxSizing: "border-box",
+            wordBreak: "break-word",
+            overflowWrap: "anywhere",
+          }}
         />
         <button
           className="chat-send"

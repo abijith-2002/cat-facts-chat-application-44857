@@ -53,10 +53,13 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  min-width: 0;
   width: 100vw;
+  max-width: 100vw;
   background: var(--chat-bg);
   position: relative;
-  overflow: hidden;
+  overflow-x: hidden; /* avoid scrollbars */
+  box-sizing: border-box;
 }
 
 /* New wrapper for content above fixed input */
@@ -65,14 +68,19 @@ body {
   display: flex;
   flex-direction: column;
   height: 100%;
+  min-width: 0;
+  max-width: 100vw;
+  width: 100%;
   /* prevent overflow below the input */
   margin-bottom: 0;
+  box-sizing: border-box;
 }
 
 
 /* Header styles */
 .chat-header {
   width: 100%;
+  max-width: 100vw;
   text-align: left;
   padding: 1.5rem 2rem 1.25rem 2rem;
   font-size: 2rem;
@@ -85,6 +93,8 @@ body {
   align-items: center;
   box-shadow: 0 2px 16px 0 rgba(40, 48, 64, 0.08);
   z-index: 2;
+  box-sizing: border-box;
+  overflow-x: auto;
 }
 .chat-header .logo {
   font-size: 2.1rem;
@@ -100,11 +110,16 @@ body {
   flex-direction: column;
   gap: 0.2rem;
   overflow-y: auto;
+  overflow-x: hidden;
   padding: 2rem 0.7rem 1rem 0.7rem;
   background: var(--chat-bg);
   scroll-behavior: smooth;
   height: calc(100vh - 70px - 84px); /* header + input estimate, refine with variables if needed */
   /* The actual height is header height (~70px) + input row height (~84px); may adjust per responsive design */
+  width: 100%;
+  max-width: 100vw;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 /* On small screens, adjust height of chat window to keep above input row */
@@ -122,11 +137,12 @@ body {
 /* Message bubble styles */
 .msg-bubble {
   position: relative;
-  max-width: 70vw;
+  max-width: 96vw;
+  width: fit-content;
+  box-sizing: border-box;
   padding: 1rem 1.25rem 0.6rem 1.25rem;
   margin-bottom: 0.7rem;
   border-radius: 18px;
-  word-break: break-word;
   font-size: 1rem;
   font-family: "Inter", sans-serif;
   line-height: 1.52;
@@ -134,7 +150,12 @@ body {
   display: inline-block;
   clear: both;
   min-width: 6ch;
-  overflow-wrap: break-word;
+  /* Modern break-word settings for any language/emoji/link */
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+  /* Soft hyphen hint for very long single words */
+  hyphens: auto;
   transition: box-shadow 0.2s;
 }
 
@@ -143,18 +164,24 @@ body {
   color: var(--user-text);
   align-self: flex-end;
   margin-right: 0.3rem;
+  margin-left: auto;
   border-bottom-right-radius: 8px;
   border-bottom-left-radius: 20px;
   box-shadow: 0 2px 12px rgba(136, 192, 208, 0.08);
+  max-width: 96vw;
+  min-width: 0;
 }
 .bot-bubble {
   background: var(--bot-bubble-bg);
   color: var(--bot-text);
   align-self: flex-start;
   margin-left: 0.3rem;
+  margin-right: auto;
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 20px;
   box-shadow: 0 3px 22px rgba(94,129,172, 0.12);
+  max-width: 96vw;
+  min-width: 0;
 }
 
 /* Message text and timestamp */
@@ -178,7 +205,8 @@ body {
   left: 0;
   bottom: 0;
   width: 100vw;
-  max-width: 100%;
+  min-width: 0;
+  max-width: 100vw;
   display: flex;
   align-items: flex-end;
   padding: 1.4rem 1.3rem 1.4rem 1.3rem;
@@ -187,6 +215,8 @@ body {
   gap: 0.65rem;
   z-index: 10;
   box-shadow: 0 -2px 16px 0 rgba(40,48,64,0.07);
+  box-sizing: border-box;
+  overflow-x: auto;
 }
 
 /* Add bottom padding to chat-root or chat-content to ensure messages aren't hidden by fixed input */
@@ -196,14 +226,32 @@ body {
 }
 
 @media (max-width: 520px) {
+  .chat-root,
+  .chat-window,
+  .chat-header,
+  .chat-input-row,
+  .msg-bubble,
+  .user-bubble,
+  .bot-bubble {
+    max-width: 100vw;
+    min-width: 0;
+    box-sizing: border-box;
+  }
   .chat-input-row {
     padding: 0.7rem 0.45rem 0.80rem 0.46rem;
+  }
+  .msg-bubble {
+    font-size: 0.97rem;
+    padding: 0.83rem 0.85rem 0.56rem 0.75rem;
+    max-width: 97vw;
   }
 }
 
 
 .chat-input {
   flex: 1;
+  min-width: 0;
+  max-width: 100%;
   resize: none;
   border: 1.5px solid var(--input-border);
   background: var(--input-bg);
@@ -216,6 +264,9 @@ body {
   margin-right: 0.1rem;
   box-shadow: 0 0 0 2px rgba(94, 129, 172, 0.04) inset;
   transition: border-color 0.18s, background 0.2s;
+  box-sizing: border-box;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 .chat-input:focus {
@@ -346,3 +397,7 @@ body {
   }
 }
 
+/* Apply box-sizing: border-box universally to prevent accidental overflow */
+html, body, #root, * , *:before, *:after {
+  box-sizing: border-box !important;
+}
