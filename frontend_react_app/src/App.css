@@ -185,19 +185,55 @@ body {
   min-width: 0;
 }
 
-/* Message text and timestamp */
+/* Message text (top line of bubble) */
 .msg-text {
   display: block;
-  margin-bottom: 0.3em;
+  margin-bottom: 0;
 }
 
-.msg-time {
-  float: right;
-  font-size: 0.82em;
+/* New: place timestamps OUTSIDE the bubble, beneath or beside, unobtrusive and consistent */
+.msg-time-outside {
+  font-size: 0.81em;
   color: var(--msg-time);
-  opacity: 0.72;
-  margin-top: -0.2em;
-  margin-right: 0.12em;
+  opacity: 0.56;
+  margin-top: 0.13em;
+  margin-bottom: 0.7em;
+  letter-spacing: 0.01em;
+  user-select: none;
+  line-height: 1.1;
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+  text-align: right;
+  /* subtle drop so it feels separate from bubble, but visually grouped */
+}
+
+.msg-row {
+  width: 100%;
+  max-width: 97vw;
+  display: flex;
+  flex-direction: column;
+  /* will override align-items via .msg-row-user/.msg-row-bot for alignment */
+}
+
+/* User messages right-aligned and timestamp right */
+.msg-row-user {
+  align-items: flex-end;
+}
+.msg-time-user {
+  text-align: right;
+}
+
+/* Bot messages left-aligned and timestamp left */
+.msg-row-bot {
+  align-items: flex-start;
+}
+.msg-time-bot {
+  text-align: left;
+}
+
+/* Legacy .msg-time can be removed, but keep for compatibility */
+.msg-time {
+  display: none;
 }
 
 /* Chat input row */

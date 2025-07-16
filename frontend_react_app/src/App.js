@@ -136,21 +136,36 @@ function App() {
               key={idx}
               className={
                 msg.sender === "user"
-                  ? "msg-bubble user-bubble"
-                  : "msg-bubble bot-bubble"
+                  ? "msg-row msg-row-user"
+                  : "msg-row msg-row-bot"
               }
-              aria-label={msg.sender === "user" ? "User message" : "Bot message"}
-              style={{
-                maxWidth: "96vw",
-                minWidth: 0,
-                overflowWrap: "anywhere",
-                wordBreak: "break-word",
-                whiteSpace: "pre-wrap",
-                boxSizing: "border-box",
-              }}
+              style={{ display: "flex", flexDirection: "column", alignItems: msg.sender === "user" ? "flex-end" : "flex-start" }}
             >
-              <span className="msg-text">{msg.text}</span>
-              <span className="msg-time">
+              <div
+                className={
+                  msg.sender === "user"
+                    ? "msg-bubble user-bubble"
+                    : "msg-bubble bot-bubble"
+                }
+                aria-label={msg.sender === "user" ? "User message" : "Bot message"}
+                style={{
+                  maxWidth: "96vw",
+                  minWidth: 0,
+                  overflowWrap: "anywhere",
+                  wordBreak: "break-word",
+                  whiteSpace: "pre-wrap",
+                  boxSizing: "border-box",
+                }}
+              >
+                <span className="msg-text">{msg.text}</span>
+              </div>
+              <span
+                className={
+                  "msg-time-outside" +
+                  (msg.sender === "user" ? " msg-time-user" : " msg-time-bot")
+                }
+                aria-label="Message time"
+              >
                 {new Date(msg.timestamp).toLocaleTimeString([], {
                   hour: "2-digit",
                   minute: "2-digit",
