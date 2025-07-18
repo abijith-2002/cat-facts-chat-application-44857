@@ -3,13 +3,17 @@ import "./App.css";
 
 // PUBLIC_INTERFACE
 /**
- * App Component: A single-page chat interface using the Nord color palette.
+ * App Component: Nord-themed single-page chat UI (modern, minimalistic) for Cat Facts Chat.
+ *
  * Features:
- * - Message input and history display
- * - Auto-response with random cat facts
- * - Responsive and minimalistic
- * - Auto-scroll to latest message
- * - Uses Inter font and environment variable for API URL
+ * - User chat input (with Enter/Shift+Enter logic)
+ * - Message history display (bubbles styled by sender in Nord palette)
+ * - Automatic response with a random cat fact (from configurable API endpoint)
+ * - Responsive, light-mode design, Inter font auto-injected
+ * - Auto-scrolls to latest message
+ * - Fully configured for .env API URLs, safe for deployment or extension
+ *
+ * NOTE: To change the cat fact API, set REACT_APP_CATFACT_API in a .env file.
  */
 function App() {
   const [messages, setMessages] = useState([
